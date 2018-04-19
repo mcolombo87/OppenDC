@@ -21,6 +21,7 @@ from app import views
 
 urlpatterns = [
     path('', views.index, name='home'),
-    path('login/', views.login, name='login'),
+    path('login/', views.loginPage, name='login'),
+    path('OppenDC/', views.home, name='OppenDC'),
     path('admin/', admin.site.urls),
 ]
