@@ -27,6 +27,6 @@ def loginPage(request):
 @login_required()
 def home(request):
     context = {'username':'PRUEBA'}
-    return render(request, 'app/navigationBarHead.html', context)
+    return render(request, 'app/home.html', context)
 
     

@@ -1,5 +1,4 @@
 {% extends "app/index.html" %}
-<!doctype html>
 {% block content %}
 <html lang="en">
   <head>
@@ -19,24 +18,30 @@
     <link href="{% static 'app/css/signin.css' %}" rel="stylesheet">
   </head>
   <body class="text-center">
-    <form action="{% url 'login' %}" method="post" class="form-signin">
-      {% csrf_token %}
-      <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      {% if retry == True %}<div class="alert alert-warning" role="alert">
-            Username or Password Invalid</div>{% endif %}
-      <label for="inputUsername" class="sr-only">Username</label>
-      <input type="text" id="inputUsername" name="inputUsername" class="form-control" placeholder="Username" required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
-      </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-muted">&copy; Oppen 2018</p>
-    </form>
+    <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <form action="{% url 'login' %}" method="post" class="form-signin">
+                        {% csrf_token %}
+                        <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+                        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                        {% if retry == True %}<div class="alert alert-warning" role="alert">
+                                Username or Password Invalid</div>{% endif %}
+                        <label for="inputUsername" class="sr-only">Username</label>
+                        <input type="text" id="inputUsername" name="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="Password" required>
+                        <div class="checkbox mb-3">
+                            <label>
+                            <input type="checkbox" value="remember-me"> Remember me
+                            </label>
+                        </div>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                        <p class="mt-5 mb-3 text-muted">&copy; M.Colombo - Oppen 2018</p>
+                    </form>
+                </div>
+            </div>
+        </div>
   </body>
 </html>
 {% endblock %}
