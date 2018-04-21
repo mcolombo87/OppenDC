@@ -26,7 +26,14 @@ def loginPage(request):
 
 @login_required()
 def home(request):
-    context = {'username':'PRUEBA'}
+    user = request.user
+    last_name = user.last_name
+    first_name = user.first_name
+    if len(first_name) > 0 and len(last_name) > 0:
+        name_to_show = user.last_name +', '+ user.first_name
+    else:
+        name_to_show = user.username
+    context = {'username':name_to_show}
     return render(request, 'app/home.html', context)
 
     
