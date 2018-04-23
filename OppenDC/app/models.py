@@ -7,12 +7,12 @@ class Source(models.Model):
         (0, 'PASSED'),
         (1, 'ERROR'),
     )
-    code = models.CharField(max_length=20)
+    code = models.CharField(max_length=20, db_index=True)
     name = models.CharField(max_length=50)
     gitrepo = models.CharField(max_length=100)
-    lastcontrol = models.DateTimeField()
+    lastcontrol = models.DateTimeField(null=True)
     status = models.BooleanField(choices=STATUS)
-    build_version = models.CharField(max_length=20)
+    build_version = models.CharField(max_length=20, null=True)
     on_revision = models.BooleanField()
 
     def __str__(self):
@@ -27,7 +27,7 @@ class Server(models.Model):
         ('OWN','OWN'),
         ('OTHER','OTHER'),
     )
-    server_code = models.CharField(max_length=20)
+    server_code = models.CharField(max_length=20, db_index=True)
     server_type = models.CharField(max_length=10, choices=SERVER_TYPES)
     server_name = models.CharField(max_length=50)
     url = models.CharField(max_length=100)
@@ -38,7 +38,7 @@ class Server(models.Model):
 class Target(models.Model):
     client_code = models.ForeignKey(Client, on_delete=models.CASCADE)
     server_code = models.ForeignKey(Server, on_delete=models.CASCADE)
-    target_name = models.CharField(max_length=50)
+    target_name = models.CharField(max_length=50, db_index=True)
     sources_group = models.ManyToManyField(Source, through='SourcesTargets')
     url_target = models.CharField(max_length=100)
     
@@ -49,7 +49,8 @@ class SourcesTargets(models.Model):
     target_id = models.ForeignKey(Target, on_delete=models.CASCADE)
     source_id = models.ForeignKey(Source, on_delete=models.CASCADE)
     last_update = models.DateTimeField(auto_now=True)
-    source_build_version = models.CharField(max_length=20)
+    source_build = models.FileField(null=True)
+    source_build_version = models.CharField(max_length=20, null=True)
     
     def __str__(self):
         return self.target_id +':'+ self.source_id  +':'+ self.last_update  +':'+ self.source_build_version
