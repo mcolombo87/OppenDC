@@ -104,10 +104,35 @@
 {% endblock %}
 
 {% block content %}
-          <div class="col">
-            <h1 class="mt-5">VEAMOS QUE PONEMOS ACA JE</h1>
-            <ul class="list-unstyled">
-              <li>Maxi</li>
-            </ul>
-          </div>
+        <div class="col">
+            <form action="{% url 'OppenDC' %}" method="post">
+                    {% csrf_token %}
+            <h3 class="mt-1">Listado de Fuentes</h3>
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Último Control</th>
+                        <th scope="col">Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for source in sources %}
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>{{ source.name }}</td>
+                        <td>{{ source.lastcontrol }}</td>
+                        {% if source.status %}
+                        <td> Correcto </td>
+                        {% else %}
+                        <td> Con Error </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" name="refresh_sources" value="True" >Actualizar</button>
+            </form>
+        </div>
 {% endblock %}

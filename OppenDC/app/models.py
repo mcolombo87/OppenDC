@@ -4,8 +4,8 @@ from django.db import models
 
 class Source(models.Model):
     STATUS = (
-        (0, 'PASSED'),
-        (1, 'ERROR'),
+        (0, 'ERROR'),
+        (1, 'PASSED'),
     )
     code = models.CharField(max_length=20, db_index=True)
     name = models.CharField(max_length=50)
@@ -57,8 +57,8 @@ class SourcesTargets(models.Model):
 
 class DeployHistory(models.Model):
     HISTORY_STATUS = (
-        (0, 'SUCCESS'),
-        (1, 'FAIL'),
+        (0, 'FAIL'),
+        (1, 'SUCCESS'),
         (2, 'UNKNOWN'),
     )
     date = models.DateField()
