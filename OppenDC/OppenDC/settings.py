@@ -126,5 +126,15 @@ STATIC_URL = '/static/'
 
 ## Custom Settings
 
+#Login
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/login/'
+#Manage Files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+## OPPENDC Own Settings
+
+TC_BASE_URL = 'urlbase'
+TC_USERNAME = 'user'
+TC_PASSWORD = 'password'

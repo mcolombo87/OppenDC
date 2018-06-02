@@ -9,10 +9,11 @@ class Source(models.Model):
     )
     code = models.CharField(max_length=20, db_index=True)
     name = models.CharField(max_length=50)
-    gitrepo = models.CharField(max_length=100)
+    gitrepo = models.CharField(max_length=100, null=True)
     lastcontrol = models.DateTimeField(null=True)
     status = models.BooleanField(choices=STATUS)
     build_version = models.CharField(max_length=20, null=True)
+    internal_teamcity_build = models.IntegerField(null=True)
     on_revision = models.BooleanField()
 
     def __str__(self):
@@ -36,11 +37,17 @@ class Server(models.Model):
         return self.server_name
 
 class Target(models.Model):
+    TARGET_TYPE = (
+        (0, 'QA'),
+        (1, 'Canary'),
+        (2, 'Normal'),
+    )
     client_code = models.ForeignKey(Client, on_delete=models.CASCADE)
     server_code = models.ForeignKey(Server, on_delete=models.CASCADE)
     target_name = models.CharField(max_length=50, db_index=True)
     sources_group = models.ManyToManyField(Source, through='SourcesTargets')
     url_target = models.CharField(max_length=100)
+    target_type = models.IntegerField(choices=TARGET_TYPE, default=2)
     
     def __str__(self):
         return self.target_name
@@ -49,11 +56,29 @@ class SourcesTargets(models.Model):
     target_id = models.ForeignKey(Target, on_delete=models.CASCADE)
     source_id = models.ForeignKey(Source, on_delete=models.CASCADE)
     last_update = models.DateTimeField(auto_now=True)
-    source_build = models.FileField(null=True)
     source_build_version = models.CharField(max_length=20, null=True)
     
     def __str__(self):
         return self.target_id +':'+ self.source_id  +':'+ self.last_update  +':'+ self.source_build_version
+
+class Update(models.Model):
+    UPDATE_STATUS = (
+        (0, 'QA'),
+        (1, 'Canary'),
+        (2, 'Deploy'),
+    )
+    source_code = models.CharField(max_length=20, db_index=True)
+    create_datetime = models.DateTimeField()
+    source_build_version = models.CharField(max_length=20)
+    source_build = models.FileField(upload_to='builds/%Y/')
+    stage = models.IntegerField(choices=UPDATE_STATUS, default=0)
+    closed = models.BooleanField()
+    next_stage_datetime_set = models.DateTimeField()
+    internal_teamcity_build = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.source_code +' : '+ self.source_build_version  +' : '+ str(self.create_datetime)  +' : '+ str(self.stage)
+
 
 class DeployHistory(models.Model):
     HISTORY_STATUS = (

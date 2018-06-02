@@ -18,10 +18,13 @@ from django.urls import path, include
 import django.contrib.auth.views
 #include for import app/urls.py (in future)
 from app import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', views.index, name='home'),
     path('login/', views.loginPage, name='login'),
     path('OppenDC/', views.home, name='OppenDC'),
     path('admin/', admin.site.urls),
-]
+    path('OppenDC/Deploy/', views.deploy, name='Deploy'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
