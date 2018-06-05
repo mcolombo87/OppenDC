@@ -56,8 +56,7 @@ def deploy(request):
         file_name = str(source_candidate.code)+"V"+str(source_candidate.build_version)+".zip"
         record.source_build.save(file_name, teamcityconnect.takeSourceBuild(record))
         record.save()
-        context = {'texto':'POST'}
-    else:
-        context = {'texto':'GET'}
+    deploys = Update.objects.all()
+    context = {'deploys': deploys }
     return render(request, 'app/deploy.html', context)
     

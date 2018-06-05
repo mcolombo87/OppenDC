@@ -1,5 +1,55 @@
 {% extends "app/home.html" %}
 
 {% block content %}
-<div><h1> {{ texto }} </h1></div>
+<div class="col-sm-8">
+    <h3 class="mt-1">Deploys</h3>
+    {% for deplo in deploys %}
+    <div class="card">
+        <div class="card-body text-center">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h5 class="card-title">  {{ deplo.source_code }} - {{ deplo.source_build_version }}</h5>
+                    <p class="card-text">Creación: {{ deplo.create_datetime }}</p>
+                    <p class="card-text">Proximo Estado</p>
+                </div>
+                <div class="col-sm-4">
+                    <row>
+                        <select class="custom-select">
+                            <option selected>{{ deplo.get_stage_display }}</option>
+                            {% if deplo.stage == 0 %}
+                                <option value="1">Canary</option>
+                                <option value="2">Deploy</option>
+                            {% elif deplo.stage == 1 %}
+                                <option value="0">QA</option>
+                                <option value="2">Deploy</option>
+                            {% elif deplo.stage == 2 %}
+                                <option value="1">Canary</option>
+                                <option value="2">Deploy</option>
+                            {% endif %}
+                        </select>
+                    </row>
+                    <row>
+                        <a href=" {{ deplo.source_build.url }} " class="badge badge-info">Descargar Build</a>
+                        <a href="#" class="badge badge-secundary">Detalles</a>
+                    </row>
+                </div>
+                <div class="col-sm-4">
+                    <div class="alert alert-secondary" role="alert">
+                            This is a secondary alert—check it out!
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="container-fluid">
+                        <button class="btn btn-primary" type="submit" name="deploy" value= "test" >Deploy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
