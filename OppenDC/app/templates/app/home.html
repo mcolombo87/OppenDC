@@ -1,10 +1,11 @@
 {% extends "app/index.html" %}
 
 {% block navigationBar %}
+{% load static %}
 <nav class="navbar navbar-expand-lg navbar-dark  fixed-top" style="background-color: #062491;">
     <div class="container">
       <a class="navbar-brand" href="#">
-        Oppen Deployment Control
+            <img class="img-fluid" width="100" src="{% static 'app/images/oppen.png' %}" alt=""/> Deployment Control
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -12,12 +13,12 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Example
+            <a class="nav-link" href="#">My Profile
               <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"> {{ username }} </a>
+            <a class="nav-link"> {{ request.session.name_to_show }} </a>
           </li>
         </ul>
       </div>

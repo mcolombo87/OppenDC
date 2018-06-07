@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import URLValidator
 
 # Create your models here.
 
@@ -7,7 +8,7 @@ class Source(models.Model):
         (0, 'ERROR'),
         (1, 'PASSED'),
     )
-    code = models.CharField(max_length=20, db_index=True)
+    code = models.CharField(max_length=20, unique=True, db_index=True)
     name = models.CharField(max_length=50)
     gitrepo = models.CharField(max_length=100, null=True)
     lastcontrol = models.DateTimeField(null=True)
@@ -20,7 +21,8 @@ class Source(models.Model):
         return self.name
 
 class Client(models.Model):
-    client_name = models.CharField(max_length=50)
+    code = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=50)
 
 class Server(models.Model):
     SERVER_TYPES = (
@@ -28,10 +30,10 @@ class Server(models.Model):
         ('OWN','OWN'),
         ('OTHER','OTHER'),
     )
-    server_code = models.CharField(max_length=20, db_index=True)
+    server_code = models.CharField(max_length=20, unique=True, db_index=True)
     server_type = models.CharField(max_length=10, choices=SERVER_TYPES)
     server_name = models.CharField(max_length=50)
-    url = models.CharField(max_length=100)
+    url = models.CharField(max_length=100, validators=[URLValidator()])
 
     def __str__(self):
         return self.server_name
@@ -46,8 +48,10 @@ class Target(models.Model):
     server_code = models.ForeignKey(Server, on_delete=models.CASCADE)
     target_name = models.CharField(max_length=50, db_index=True)
     sources_group = models.ManyToManyField(Source, through='SourcesTargets')
-    url_target = models.CharField(max_length=100)
+    url_target = models.CharField(max_length=100, validators=[URLValidator()])
     target_type = models.IntegerField(choices=TARGET_TYPE, default=2)
+    username = models.CharField(max_length=50, null=True)
+    password = models.CharField(max_length=50, null=True)
     
     def __str__(self):
         return self.target_name
@@ -59,7 +63,7 @@ class SourcesTargets(models.Model):
     source_build_version = models.CharField(max_length=20, null=True)
     
     def __str__(self):
-        return self.target_id +':'+ self.source_id  +':'+ self.last_update  +':'+ self.source_build_version
+        return str(self.target_id) +':'+ str(self.source_id)  +':'+ str(self.last_update)  +':'+ str(self.source_build_version)
 
 class Update(models.Model):
     UPDATE_STATUS = (
@@ -75,6 +79,7 @@ class Update(models.Model):
     closed = models.BooleanField()
     next_stage_datetime_set = models.DateTimeField()
     internal_teamcity_build = models.IntegerField(default=0)
+    scriptdir_name = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return self.source_code +' : '+ self.source_build_version  +' : '+ str(self.create_datetime)  +' : '+ str(self.stage)
@@ -92,4 +97,4 @@ class DeployHistory(models.Model):
     status = models.IntegerField(choices=HISTORY_STATUS)
 
     def __str__(self):
-        return self.date  +':'+ self.time  +':'+ self.target_id
+        return str(self.date)  +':'+ str(self.time)  +':'+ str(self.target_id)
